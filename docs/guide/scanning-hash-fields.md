@@ -5,7 +5,7 @@ title: 'Redis: Scanning hash fields into a struct'
 <CoverImage title="Scanning hash fields into a struct" />
 
 Commands that return multiple keys and values provide a helper to scan results into a struct, for
-example, such commands as `HGetAll`, `HMGet`, and `MGet`.
+example, such commands as `HMGet`, and `MGet`.
 
 You can use `redis` struct field tag to change field names or completely ignore some fields:
 
@@ -27,18 +27,18 @@ rdb := redis.NewClient(&redis.Options{
 	Addr: ":6379",
 })
 
-if _, err := rdb.Pipelined(ctx, func(rdb redis.Pipeliner) error {
-	rdb.HSet(ctx, "key", "str1", "hello")
-	rdb.HSet(ctx, "key", "str2", "world")
-	rdb.HSet(ctx, "key", "int", 123)
-	rdb.HSet(ctx, "key", "bool", 1)
+if _, err := rdb.Pipelined(func(rdb redis.Pipeliner) error {
+	rdb.HSet("key", "str1", "hello")
+	rdb.HSet("key", "str2", "world")
+	rdb.HSet("key", "int", 123)
+	rdb.HSet("key", "bool", 1)
 	return nil
 }); err != nil {
 	panic(err)
 }
 ```
 
-After that we are ready to scan the data using `HGetAll`:
+<!-- After that we are ready to scan the data using `HGetAll`:
 
 ```go
 var model1 Model
@@ -56,7 +56,7 @@ var model2 Model
 if err := rdb.HMGet(ctx, "key", "str1", "int").Scan(&model2); err != nil {
 	panic(err)
 }
-```
+``` -->
 
 You can also find the example above on
 [GitHub](https://github.com/go-redis/redis/tree/master/example/scan-struct).
